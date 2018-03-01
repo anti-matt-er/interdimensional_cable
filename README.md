@@ -1,2 +1,5 @@
-# interdimensional_cable
-Hey! Oh, cool! Is that crystallized Zanthonite? It conducts electrons across dimensions. Twenty percent accurate, as usual, Morty. The important thing being I just upgraded our cable package with programming from every conceivable reality.
+# Interdimensional Cable!
+
+Hey wow okay you found me haha. That's pretty neat, I guess, like uhh... Listen I wasn't expecting anyone to read this readme and it's just as f\*\*\*ing awkward for me as it is for you okay?
+
+No one belongs anywhere, we're all going to die.
