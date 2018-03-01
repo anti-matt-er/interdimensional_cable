@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Interdimensional Cable!</title>
+	<meta name="author" content="name">
+	<meta name="description" content="description here">
+	<meta name="keywords" content="keywords,here">
+	<style type="text/css">
+	html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+  }
+		html, body {
+			height: 100%;
+		}
+		* {
+			padding: 0;
+			margin: 0;
+		}
+		body {
+			background: url("https://www.toptal.com/designers/subtlepatterns/patterns/light-veneer.png");
+			overflow: hidden;
+		}
+		.container {
+			background: url('tv.png');
+			background-size: auto 100%;
+			background-position: center bottom;
+			background-repeat: no-repeat;
+			position: absolute;
+			top: 0;
+			left: 0;
+			min-width: 100%;
+			height: 100%;
+			padding: 25.5vh 0.7vh 8vh 0;
+		}
+		.screen {
+			height: 100%;
+			width: 123.3vh;
+			margin: auto;
+			background: url('static.jpg');
+			background-size: 100% 100%;
+		}
+		#tv {
+			display: none;
+			width: 100%;
+			height: 100%;
+			border: none;
+		}
+		#tv[src]:not([src=""]) {
+			display: block;
+		}
+		.remote {
+			position: absolute;
+			bottom: -30vh;
+			left: 10%;
+			width: 65vh;
+			height: 50vh;
+			background: url('remote.png');
+			background-size: 100% 100%;
+			transition: 0.5s bottom ease;
+		}
+		.remote:hover {
+			bottom: 0;
+		}
+		.remote a {
+			display: block;
+			position: relative;
+			float: left;
+		}
+		[href="#play"] {
+			top: 4vh;
+			left: 46vh;
+			width: 6vh;
+			height: 6vh;
+		}
+		#youtube {
+			top: 10.25vh;
+			left: 45vh;
+			width: 4vh;
+			height: 5vh;
+		}
+		[href="#voldown"] {
+			top: 9.75vh;
+			left: 33vh;
+			width: 4vh;
+			height: 3vh;
+		}
+		[href="#volmute"] {
+			top: 13vh;
+			left: 32.5vh;
+			width: 4vh;
+			height: 3vh;
+		}
+		[href="#volup"] {
+			top: 16vh;
+			left: 30.5vh;
+			width: 4vh;
+			height: 3vh;
+		}
+		[href="#flick"] {
+			top: 15.5vh;
+			left: 16.5vh;
+			width: 9vh;
+			height: 9vh;
+		}
+		#reddit {
+			top: 28vh;
+			left: 7.5vh;
+			width: 4.5vh;
+			height: 4.5vh;
+		}
+		.logo {
+			position: fixed;
+			top: 0.5em;
+			left: 50%;
+			width: 30vh;
+			margin-left: -15vh;
+		}
+		.logo img {
+			width: 100%;
+		}
+	</style>
+	<script type="text/javascript">
+		var tag = document.createElement('script');
+
+		tag.src = "https://www.youtube.com/iframe_api";
+		var firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+		// 3. This function creates an <iframe> (and YouTube player)
+		//    after the API code downloads.
+		var player;
+		function onYouTubeIframeAPIReady() {
+			player = new YT.Player('tv', {
+				playerVars: {
+					'autoplay': 1,
+					'controls': 0,
+					'disablekb': 1,
+					'modestbranding': 1,
+					'rel': 0,
+					'showinfo': 0,
+				},
+				events: {
+					'onReady': channel_flick
+				}
+			});
+		}
+
+		var channel_flick = function channel_flick(fromButton = false) {
+			if (fromButton) {
+				document.getElementById('tv').style.display = 'none';
+			}
+			var request = new XMLHttpRequest();
+			request.open('GET', 'https://www.reddit.com/r/interdimensionalcable/random.json', true);
+
+			request.onload = function() {
+				if (request.status >= 200 && request.status < 400) {
+					var data = JSON.parse(request.responseText);
+					var vidid = youtube_parser(data[0].data.children[0].data.url);
+					if (vidid) {
+						player.loadVideoById(vidid);
+						document.getElementById('youtube').setAttribute('href', 'https://www.youtube.com/watch?v=' + vidid);
+						document.getElementById('reddit').setAttribute('href', 'https://www.reddit.com' + data[0].data.children[0].data.permalink);
+						if (fromButton) {
+							setTimeout((function fn() {
+								document.getElementById('tv').style.display = 'block';
+								return fn;
+							})(), 1000);
+						}
+					} else {
+						channel_flick();
+					}
+				}
+			};
+
+			request.send();
+		};
+		
+		function youtube_parser(url){
+			var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+			var match = url.match(regExp);
+			return (match&&match[7].length==11)? match[7] : false;
+		}
+		
+		function play_pause() {
+			if (player.getPlayerState() === 1) {
+				player.pauseVideo();
+			} else {
+				player.playVideo();
+			}
+		}
+		
+		function volume_down() {
+			player.setVolume(player.getVolume() - 10);
+		}
+		
+		function volume_up() {
+			player.setVolume(player.getVolume() + 10);
+		}
+		
+		function volume_mute() {
+			if (player.isMuted()) {
+				player.unMute();
+			} else {
+				player.mute();
+			}
+		}
+	</script>
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-XXXXXXXX-Y']);
+		_gaq.push(['_trackPageview']);
+		(function()
+		{
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="screen">
+			<div id="tv"></div>
+		</div>
+	</div>
+	<div class="remote">
+		<a href="#play" onclick="play_pause()"></a>
+		<a href="#" id="youtube" target="_blank"></a>
+		<a href="#voldown" onclick="volume_down()"></a>
+		<a href="#volmute" onclick="volume_mute()"></a>
+		<a href="#volup" onclick="volume_up()"></a>
+		<a href="#flick" onclick="channel_flick(true)"></a>
+		<a href="#" id="reddit" target="_blank"></a>
+	</div>
+	<div class="logo">
+		<img src="logo.png" alt="Interdimensional Cable!" />
+	</div>
+</body>
+</html>
